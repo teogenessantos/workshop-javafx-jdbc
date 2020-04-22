@@ -98,7 +98,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
-			DepartamentFormController departamentFormController = loader.getController();
+			DepartmentFormController departamentFormController = loader.getController();
 			departamentFormController.setDepartment(department);
 			departamentFormController.setDepartmentService(new DepartmentService());
 			departamentFormController.subscribeDataChangeListener(this);
