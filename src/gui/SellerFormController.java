@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -134,7 +136,29 @@ public class SellerFormController implements Initializable {
 			validationException.addErrors("name", "Field Name can't be empty");
 		}
 		seller.setName(txtName.getText());
-
+		
+		if (txtEmail.getText() == null || txtEmail.getText().trim() == "") {
+			validationException.addErrors("email", "Field Email can't be empty");
+		}
+		seller.setEmail(txtEmail.getText());
+		
+		if(dpBirthDate.getValue() == null) {
+			validationException.addErrors("birthDate", "Field Birht Date can't be empty");
+		}
+		else {
+			Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+			seller.setBirthDate(Date.from(instant));
+		}
+		
+		
+		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim() == "") {
+			validationException.addErrors("baseSalary", "Field Base Salary can't be empty");
+		}
+		
+		seller.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
+		
+		seller.setDepartment(comboBoxDepartment.getValue());
+		
 		if (validationException.getErrors().size() > 0) {
 			throw validationException;
 		}
@@ -193,9 +217,10 @@ public class SellerFormController implements Initializable {
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
-		if (fields.contains("name")) {
-			labelErrorName.setText(errors.get("name"));
-		}
+		labelErrorName.setText((fields.contains("name") ? errors.get("name") :""));
+		labelErrorEmail.setText((fields.contains("email") ? errors.get("email") :""));
+		labelErrorBaseSalary.setText((fields.contains("baseSalary") ? errors.get("baseSalary") :""));
+		labelErrorBirthDate.setText((fields.contains("birthDate") ? errors.get("birthDate") :""));
 	}
 
 	private void initializeComboBoxDepartment() {
